@@ -278,7 +278,7 @@
 
 <header>
     <div class="container">
-        <h1>Интернет‑маркетинг<br>контекстная реклама & копирайтинг</h1>
+        <h1>>Контекстная реклама & тексты для бизнеса</h1>
         <div class="subtitle">специалист по продвижению в Яндекс.Директ / Google Ads</div>
     </div>
 </header>
@@ -286,7 +286,7 @@
 <nav>
     <div class="container">
         <ul class="nav-links">
-            <li><a href="#main-focus">Основной фокус</a></li>
+            <li><a href="#main-focus">Основные услуги</a></li>
             <li><a href="#extra-services">Дополнительные услуги</a></li>
             <li><a href="#certificates">Сертификаты</a></li>
             <li><a href="#pricing-cost">Стоимость</a></li>
@@ -298,7 +298,7 @@
     
     <!-- ============= ОСНОВНОЙ ФОКУС (раздел 1) ============= -->
     <section id="main-focus" class="major-section">
-        <h2 class="section-title">Основной фокус</h2>
+        <h2 class="section-title">Основные услуги</h2>
         <div class="services-grid">
             <div class="service-card">
                 <h3>Ведение рекламных кампаний</h3>
