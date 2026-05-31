@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Резюме — интернет-маркетинг | Академический стиль (LaTeX)</title>
+    <style>
+        /* -----------------------------------------------
+           Академический стиль LaTeX: засечный шрифт, чёрный цвет.
+           Увеличен ТОЛЬКО основной текст (body: 21px).
+           Заголовки возвращены к исходным пропорциям (как в первом варианте).
+        ----------------------------------------------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', Times, serif;
+            background: #ffffff;
+            color: #000000;
+            line-height: 1.55;
+            /* ТОЛЬКО основной текст увеличен до 21px (было 16px) */
+            font-size: 21px;
+            font-weight: normal;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        /* Заголовки — исходные размеры (как в самой первой версии, без увеличения) */
+        h1, h2, h3, h4, .nav-links a, .pricing-label {
+            font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', Times, serif;
+            color: #000000;
+        }
+
+        /* ШАПКА */
+        header {
+            padding: 60px 0 32px 0;
+            border-bottom: 2px solid #e5e5e5;
+            background: #fff;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.4rem;      /* исходный размер (38px) — не увеличен */
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;     /* исходный ~17px */
+            color: #2c2c2c;
+            font-family: inherit;
+            border-top: 1px solid #ddd;
+            display: inline-block;
+            padding-top: 8px;
+        }
+
+        /* НАВИГАЦИЯ */
+        nav {
+            border-bottom: 1px solid #eaeaea;
+            background: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 32px;
+            padding: 16px 0;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 0.9rem;      /* исходный размер */
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #1a1a1a;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #000;
+        }
+
+        /* ОСНОВНАЯ ЧАСТЬ */
+        main {
+            padding: 48px 0 72px;
+        }
+
+        /* ДВА КРУПНЫХ РАЗДЕЛА */
+        .major-section {
+            margin-bottom: 56px;
+            border-bottom: 1px solid #eaeef2;
+            padding-bottom: 28px;
+        }
+
+        .major-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.5rem;      /* исходный размер (24px) — не увеличен */
+            font-weight: 700;
+            margin-bottom: 28px;
+            letter-spacing: -0.2px;
+            color: #000;
+        }
+
+        /* КАРТОЧКИ УСЛУГ */
+        .services-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .service-card {
+            background: #ffffff;
+            border: 1px solid #e2e2e2;
+            padding: 28px 32px;
+        }
+
+        .service-card h3 {
+            font-size: 1.2rem;      /* исходный размер (19px) — не увеличен */
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #000;
+            border-left: 4px solid #000;
+            padding-left: 16px;
+        }
+
+        .service-list {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 12px;
+        }
+
+        .service-list li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 14px;
+            color: #111;
+            /* наследует 21px от body — это и есть увеличенный основной текст */
+            line-height: 1.55;
+        }
+
+        .service-list li::before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #000;
+            font-weight: 500;
+        }
+
+        /* ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ */
+        .extra-service-item {
+            border: 1px solid #e6e6e6;
+            background: #fff;
+            padding: 24px 28px;
+            margin-bottom: 20px;
+        }
+
+        .extra-service-item h4 {
+            font-size: 1.15rem;     /* исходный размер (~18px) */
+            font-weight: 700;
+            margin-bottom: 14px;
+            border-left: 3px solid #000;
+            padding-left: 14px;
+        }
+
+        /* СЕРТИФИКАТЫ */
+        .certificates-block, .pricing-block {
+            margin-top: 32px;
+            background: #fefefe;
+            border-top: 1px solid #ececec;
+            padding-top: 28px;
+        }
+
+        .certs-title, .pricing-title {
+            font-size: 1.3rem;      /* исходный (~21px) */
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .certs-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 28px;
+            list-style: none;
+            margin-top: 14px;
+        }
+
+        .certs-grid li {
+            flex: 1 1 280px;
+            font-size: 0.95rem;     /* чуть меньше основного для списка сертификатов, ~20px */
+            position: relative;
+            padding-left: 22px;
+            color: #111;
+        }
+
+        .certs-grid li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #000;
+        }
+
+        .cert-date-note {
+            font-size: 0.85rem;
+            color: #2c2c2c;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        /* СТОИМОСТЬ */
+        .pricing-box {
+            background: #f8f8f8;
+            border-left: 4px solid #000;
+            padding: 24px 32px;
+            margin-top: 14px;
+        }
+
+        .pricing-label {
+            font-weight: 800;
+            font-size: 1.1rem;      /* исходный (~17.5px) */
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .pricing-box p {
+            font-size: 1rem;        /* наследует 21px от body */
+            color: #1a1a1a;
+        }
+
+        /* ПОДВАЛ */
+        footer {
+            text-align: center;
+            border-top: 1px solid #eaeaea;
+            padding: 36px 0 40px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #222;
+        }
+
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 720px) {
+            body {
+                font-size: 19px;    /* на мобильных чуть меньше, но всё ещё крупнее исходного */
+            }
+            .container {
+                padding: 0 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .service-card {
+                padding: 20px;
+            }
+        }
+
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+        strong {
+            font-weight: 700;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>Интернет‑маркетинг<br>контекстная реклама & копирайтинг</h1>
+        <div class="subtitle">специалист по продвижению в Яндекс.Директ / Google Ads</div>
+    </div>
+</header>
+
+<nav>
+    <div class="container">
+        <ul class="nav-links">
+            <li><a href="#main-focus">Основной фокус</a></li>
+            <li><a href="#extra-services">Дополнительные услуги</a></li>
+            <li><a href="#certificates">Сертификаты</a></li>
+            <li><a href="#pricing-cost">Стоимость</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="container">
+    
+    <!-- ============= ОСНОВНОЙ ФОКУС (раздел 1) ============= -->
+    <section id="main-focus" class="major-section">
+        <h2 class="section-title">Основной фокус</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Ведение рекламных кампаний</h3>
+                <ul class="service-list">
+                    <li>Настройка и ведение рекламных кампаний в Яндекс.Директ и Google Ads (поиск, РСЯ, медийная реклама)</li>
+                    <li>Проведение A/B-тестов: рекламных кампаний, посадочные страницы</li>
+                    <li>Еженедельная аналитика РК, оптимизация ставок, минус-слова, расширение семантики</li>
+                    <li>Управление бюджетом с фокусом на ROMI, CPA, ROI</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <h3>Маркетинговые исследования & аудит</h3>
+                <ul class="service-list">
+                    <li>Исследование конкурентов: активность, аудитория, продуктовые метрики</li>
+                    <li>Анализ целевой аудитории и создание портретов (Jobs To Be Done, CJM)</li>
+                    <li>Аудит контента и UX/UI сайта (сравнительный анализ с конкурентами)</li>
+                    <li>Аудит прошлых рекламных кампаний, выдвижение гипотез для роста эффективности</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <h3>Копирайтинг</h3>
+                <ul class="service-list">
+                    <li>Создание оригинальных, глубоких текстов для сайтов, промо-страниц, лендингов</li>
+                    <li>Адаптация контента под tone of voice бренда, формирование УТП через тексты</li>
+                    <li>Написание SEO-оптимизированных статей</li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <h3>Аналитика и программирование (Python)</h3>
+                <ul class="service-list">
+                    <li>Создание дашбордов с нуля</li>
+                    <li>Автоматизация выгрузок отчетов, анализ данных с помощью Pandas/NumPy</li>
+                    <li>Построение прогнозов эффективности и моделирование LTV</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============= ДОПОЛНИТЕЛЬНЫЕ УСЛУГИ (раздел 2) ============= -->
+    <section id="extra-services" class="major-section">
+        <h2 class="section-title">Дополнительные услуги</h2>
+        <div class="services-grid">
+            <div class="extra-service-item">
+                <h4>Поисковая оптимизация (SEO)</h4>
+                <ul class="service-list">
+                    <li>Комплексное продвижение сайта в Яндекс и Google (внутренняя и внешняя оптимизация)</li>
+                    <li>Технический SEO-аудит, улучшение структуры, проработка семантического ядра</li>
+                    <li>Стратегия наращивания ссылочной массы и оптимизация коммерческих факторов</li>
+                </ul>
+            </div>
+            <div class="extra-service-item">
+                <h4>Стратегия и консалтинг</h4>
+                <ul class="service-list">
+                    <li>Разработка маркетинговой стратегии на квартал / год (каналы, KPI, бюджетирование)</li>
+                    <li>Консультации по сквозной аналитике и настройке end-to-end отчетности</li>
+                    <li>Помощь в выборе рекламных инструментов, запуск пилотных кампаний</li>
+                </ul>
+            </div>
+ 
+        </div>
+    </section>
+
+    <!-- ============= СЕРТИФИКАТЫ ============= -->
+    <section id="certificates" class="major-section" style="border-bottom: none; padding-bottom: 16px;">
+        <div class="certificates-block">
+            <h3 class="certs-title">Профессиональные сертификаты и достижения</h3>
+            <ul class="certs-grid">
+                <li>Сертификат Яндекс.Директ — базовый (январь 2026)</li>
+                <li>Сертификат Яндекс.Директ — профессиональный (январь 2026)</li>
+                <li>Сертификат Яндекс.Директ — продвинутый (январь 2026)</li>
+                <li>Сертификат Яндекс.Метрики (январь 2026)</li>
+                <li>Курс «Контекстная реклама со Звездочкой» (2021, 2023, 2025, 2026 гг.)</li>
+                <li>Призёр Хакатона Яндекс.Директ (2021, 2023, 2025 гг.)</li>
+                <li>Google Ads Search Certification — экспертный уровень</li>
+            </ul>
+            <div class="cert-date-note">* Все сертификаты актуальны, подтверждены официальными тестированиями.</div>
+        </div>
+    </section>
+
+    <!-- ============= СТОИМОСТЬ ============= -->
+    <section id="pricing-cost" class="major-section">
+        <div class="pricing-block">
+            <h3 class="pricing-title">Стоимость услуг</h3>
+            <div class="pricing-box">
+                <div class="pricing-label">Договорная / индивидуальный расчёт</div>
+                <p>Формируется исходя из отрасли, рекламного бюджета, сложности задач и необходимого объёма работ.<br>
+                Возможна фиксированная оплата за месяц ведения (retainer) или оплата за конкретные проекты: аудит, настройка, консалтинг.<br>
+                Прозрачная смета и детализация KPI. Работа с малым бизнесом, e-commerce, b2b и стартапами.</p>
+            </div>
+        </div>
+    </section>
+
+    <div style="margin: 28px 0 16px; padding: 14px 0; border-top: 1px solid #f0f0f0;">
+        <p style="font-style: normal; font-size: 0.95rem;">Методология на основе данных, итеративная оптимизация, строгий аналитический подход. Ориентация на бизнес-показатели.</p>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>© 2026 — Интернет-маркетолог, контекстная реклама и копирайтинг</p>
+        <p style="margin-top: 6px; font-size: 0.8rem;">Академический стиль LaTeX — чёткость, доказательность, экспертиза</p>
+    </div>
+</footer>
+
+</body>
+</html>
