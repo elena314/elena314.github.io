@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квиз: Расчет стоимости услуг</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            width: 100%;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 25%;
+            transition: width 0.4s ease;
+        }
+
+        .quiz-header {
+            padding: 24px 32px 0;
+        }
+
+        .step-indicator {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.3;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            padding: 0 32px 24px;
+        }
+
+        @media (min-width: 480px) {
+            .options-grid.cols-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .option-card {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary);
+            background-color: #f5f3ff;
+        }
+
+        .option-card.selected {
+            border-color: var(--primary);
+            background-color: #eef2ff;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .option-card .radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .option-card.selected .radio {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .option-card.selected .radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .option-text {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .quiz-footer {
+            padding: 0 32px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-back {
+            background: transparent;
+            color: var(--text-light);
+        }
+
+        .btn-back:hover {
+            color: var(--text);
+            background: var(--border);
+        }
+
+        .btn-back:disabled {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .btn-next {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-next:disabled {
+            background: var(--border);
+            color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        /* Result Screen */
+        .result-screen {
+            padding: 40px 32px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-icon {
+            width: 64px;
+            height: 64px;
+            background: #d1fae5;
+            color: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 24px;
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .result-output {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .result-details {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .detail-row:last-child {
+            margin-bottom: 0;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .detail-label {
+            color: var(--text-light);
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .btn-cta {
+            background: var(--success);
+            color: white;
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+        }
+
+        .btn-cta:hover {
+            background: #059669;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div id="quizContent">
+        <div class="quiz-header">
+            <div class="step-indicator" id="stepIndicator">Шаг 1 из 4</div>
+            <h2 class="question-title" id="questionTitle">Загрузка...</h2>
+        </div>
+
+        <div class="options-grid" id="optionsGrid">
+            <!-- Options will be injected here -->
+        </div>
+
+        <div class="quiz-footer">
+            <button class="btn btn-back" id="btnBack" disabled>Назад</button>
+            <button class="btn btn-next" id="btnNext" disabled>Далее</button>
+        </div>
+    </div>
+
+    <div class="result-screen" id="resultScreen">
+        <div class="result-icon">✓</div>
+        <h2 class="result-title">Мы подобрали для вас оптимальное решение!</h2>
+        <div class="result-output" id="resultOutput"></div>
+        
+        <div class="result-details">
+            <div class="detail-row">
+                <span class="detail-label">Стоимость услуги:</span>
+                <span class="detail-value" id="resultCost"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Бонус:</span>
+                <span class="detail-value" id="resultBonus"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Итоговое предложение:</span>
+                <span class="detail-value" id="resultFinal"></span>
+            </div>
+        </div>
+
+        <button class="btn btn-cta" onclick="alert('Здесь может быть форма заявки или переход в мессенджер!')">Оставить заявку</button>
+        <br><br>
+        <button class="btn btn-back" onclick="location.reload()" style="width: 100%;">Пройти квиз заново</button>
+    </div>
+</div>
+
+<script>
+    // База данных из 24 вариантов на основе вашего CSV
+    const quizData = [
+        {v: "наш аккаунт", b: "до 100К", s: "реализация", rk: "1", cost: "25К", bonus: "Аудит бесплатно", output: "25К. Аудит бесплатно"},
+        {v: "наш аккаунт", b: "до 100К", s: "реализация", rk: "0", cost: "25К", bonus: "", output: "25К."},
+        {v: "наш аккаунт", b: "до 100К", s: "консультация", rk: "1", cost: "5К/час", bonus: "Аудит бесплатно", output: "5К/час. Аудит бесплатно"},
+        {v: "наш аккаунт", b: "до 100К", s: "консультация", rk: "0", cost: "5К/час", bonus: "", output: "5К/час."},
+        {v: "наш аккаунт", b: "100-500К", s: "реализация", rk: "1", cost: "25К", bonus: "Аудит бесплатно", output: "25К. Аудит бесплатно"},
+        {v: "наш аккаунт", b: "100-500К", s: "реализация", rk: "0", cost: "25К", bonus: "", output: "25К."},
+        {v: "наш аккаунт", b: "100-500К", s: "консультация", rk: "1", cost: "5К/час", bonus: "Аудит бесплатно", output: "5К/час. Аудит бесплатно"},
+        {v: "наш аккаунт", b: "100-500К", s: "консультация", rk: "0", cost: "5К/час", bonus: "", output: "5К/час."},
+        {v: "наш аккаунт", b: "Более 500К", s: "реализация", rk: "1", cost: "25К", bonus: "Аудит бесплатно", output: "25К. Аудит бесплатно"},
+        {v: "наш аккаунт", b: "Более 500К", s: "реализация", rk: "0", cost: "25К", bonus: "", output: "25К."},
+        {v: "наш аккаунт", b: "Более 500К", s: "консультация", rk: "1", cost: "5К/час", bonus: "Аудит бесплатно", output: "5К/час. Аудит бесплатно"},
+        {v: "наш аккаунт", b: "Более 500К", s: "консультация", rk: "0", cost: "5К/час", bonus: "", output: "5К/час."},
+        {v: "аккаунт заказчика", b: "до 100К", s: "реализация", rk: "1", cost: "35К", bonus: "Аудит бесплатно", output: "35К. Аудит бесплатно"},
+        {v: "аккаунт заказчика", b: "до 100К", s: "реализация", rk: "0", cost: "35К", bonus: "", output: "35К."},
+        {v: "аккаунт заказчика", b: "до 100К", s: "консультация", rk: "1", cost: "5К/час", bonus: "Аудит бесплатно", output: "5К/час. Аудит бесплатно"},
+        {v: "аккаунт заказчика", b: "до 100К", s: "консультация", rk: "0", cost: "5К/час", bonus: "", output: "5К/час."},
+        {v: "аккаунт заказчика", b: "100-500К", s: "реализация", rk: "1", cost: "35К", bonus: "Аудит бесплатно", output: "35К. Аудит бесплатно"},
+        {v: "аккаунт заказчика", b: "100-500К", s: "реализация", rk: "0", cost: "35К", bonus: "", output: "35К."},
+        {v: "аккаунт заказчика", b: "100-500К", s: "консультация", rk: "1", cost: "5К/час", bonus: "Аудит бесплатно", output: "5К/час. Аудит бесплатно"},
+        {v: "аккаунт заказчика", b: "100-500К", s: "консультация", rk: "0", cost: "5К/час", bonus: "", output: "5К/час."},
+        {v: "аккаунт заказчика", b: "Более 500К", s: "реализация", rk: "1", cost: "35К", bonus: "Аудит бесплатно", output: "35К. Аудит бесплатно"},
+        {v: "аккаунт заказчика", b: "Более 500К", s: "реализация", rk: "0", cost: "35К", bonus: "", output: "35К."},
+        {v: "аккаунт заказчика", b: "Более 500К", s: "консультация", rk: "1", cost: "5К/час", bonus: "Аудит бесплатно", output: "5К/час. Аудит бесплатно"},
+        {v: "аккаунт заказчика", b: "Более 500К", s: "консультация", rk: "0", cost: "5К/час", bonus: "", output: "5К/час."}
+    ];
+
+    const steps = [
+        {
+            key: "variant",
+            title: "Где будет вестись работа?",
+            gridClass: "cols-2",
+            options: [
+                { value: "наш аккаунт", label: "На нашем аккаунте" },
+                { value: "аккаунт заказчика", label: "На аккаунте заказчика" }
+            ]
+        },
+        {
+            key: "budget",
+            title: "Какой у вас рекламный бюджет?",
+            gridClass: "",
+            options: [
+                { value: "до 100К", label: "До 100 000 ₽" },
+                { value: "100-500К", label: "100 000 – 500 000 ₽" },
+                { value: "Более 500К", label: "Более 500 000 ₽" }
+            ]
+        },
+        {
+            key: "service",
+            title: "Какой формат работы вам нужен?",
+            gridClass: "",
+            options: [
+                { value: "реализация", label: "Реализация (запуск и ведение)" },
+                { value: "консультация", label: "Консультация (реализуете сами)" }
+            ]
+        },
+        {
+            key: "rk",
+            title: "Есть ли уже запущенные рекламные кампании (РК)?",
+            gridClass: "cols-2",
+            options: [
+                { value: "1", label: "Да, есть" },
+                { value: "0", label: "Нет, пока нет" }
+            ]
+        }
+    ];
+
+    let currentStep = 0;
+    let answers = {};
+
+    const progressFill = document.getElementById('progressFill');
+    const stepIndicator = document.getElementById('stepIndicator');
+    const questionTitle = document.getElementById('questionTitle');
+    const optionsGrid = document.getElementById('optionsGrid');
+    const btnBack = document.getElementById('btnBack');
+    const btnNext = document.getElementById('btnNext');
+    const quizContent = document.getElementById('quizContent');
+    const resultScreen = document.getElementById('resultScreen');
+
+    function renderStep() {
+        const step = steps[currentStep];
+        progressFill.style.width = `${((currentStep + 1) / steps.length) * 100}%`;
+        stepIndicator.textContent = `Шаг ${currentStep + 1} из ${steps.length}`;
+        questionTitle.textContent = step.title;
+        
+        optionsGrid.className = `options-grid ${step.gridClass}`;
+        optionsGrid.innerHTML = '';
+
+        step.options.forEach(opt => {
+            const card = document.createElement('div');
+            card.className = `option-card ${answers[step.key] === opt.value ? 'selected' : ''}`;
+            card.innerHTML = `
+                <div class="radio"></div>
+                <div class="option-text">${opt.label}</div>
+            `;
+            card.onclick = () => selectOption(step.key, opt.value);
+            optionsGrid.appendChild(card);
+        });
+
+        btnBack.disabled = currentStep === 0;
+        btnNext.disabled = !answers[step.key];
+        btnNext.textContent = currentStep === steps.length - 1 ? 'Узнать результат' : 'Далее';
+    }
+
+    function selectOption(key, value) {
+        answers[key] = value;
+        renderStep();
+        
+        // Автопереход на следующий шаг для улучшения UX (опционально, можно убрать)
+        if (currentStep < steps.length - 1) {
+            setTimeout(() => {
+                currentStep++;
+                renderStep();
+            }, 250);
+        } else {
+            btnNext.disabled = false;
+        }
+    }
+
+    btnNext.onclick = () => {
+        if (currentStep < steps.length - 1) {
+            currentStep++;
+            renderStep();
+        } else {
+            showResult();
+        }
+    };
+
+    btnBack.onclick = () => {
+        if (currentStep > 0) {
+            currentStep--;
+            renderStep();
+        }
+    };
+
+    function showResult() {
+        const result = quizData.find(row => 
+            row.v === answers.variant &&
+            row.b === answers.budget &&
+            row.s === answers.service &&
+            row.rk === answers.rk
+        );
+
+        if (result) {
+            document.getElementById('resultOutput').textContent = result.output;
+            document.getElementById('resultCost').textContent = result.cost;
+            document.getElementById('resultBonus').textContent = result.bonus || "Не предусмотрено";
+            document.getElementById('resultFinal').textContent = result.output;
+            
+            quizContent.classList.add('hidden');
+            resultScreen.style.display = 'block';
+            progressFill.style.width = '100%';
+        } else {
+            alert("Произошла ошибка при расчете. Пожалуйста, попробуйте еще раз.");
+        }
+    }
+
+    // Инициализация
+    renderStep();
+</script>
+
+</body>
+</html>
